@@ -6,149 +6,170 @@ import edu.princeton.cs.introcs.StdDraw;
 public class Game {
 
 	public static void main(String[] args) {
-		double lv = 0.005;
-		double uv = 0.01;
-		int b = 3;
-		double r = 0.025;
-		int s = 0;
-		int hs = 0;
-		double px = 0.5;
-		double py = 0.5;
-		double ps = 0.01;
-		double[] bx = new double[b];
-		double[] bY = new double[b];
-		double[] bxv = new double[b];
-		double[] bYv = new double[b];
+		double LowestVelocity = 0.005; ///lowest velocity of balls 
+		double highVelocity = 0.01;  ///highest velocity  of balls 
+		int balls = 3; ///num of balls
+		double radius = 0.025;  /// radius of balls and players 
+		int score = 0; ///score
+		int highscore = 0; ///high score 
+		double playerx = 0.5; //player x
+		double playery = 0.5; ///player y 
+		double ps = 0.01;  /// player speed 
+		double[] ballx = new double[b]; ///ball x  formely bx 
+		double[] ballY = new double[b];  /// ball y coordinate  formely bY 
+		double[] ballXvelocity = new double[b];  /// ball x velocity bxv
+		double[] ballYvelocity = new double[b];  /// ball y velocity bYv 
 		
-		for(int i = 0; i < b; i++) {
-			bx[i] = Math.random();
-			bY[i] = Math.random();
-			bxv[i] = Math.random() * (uv - lv) + lv;
-			bYv[i] = Math.random() * (uv - lv) + lv;
+		
+		//initialize ball positions and velocities
+		public static void initalizeBalls(){ 
+           for (int i = 0; i < balls; i++) {
+     		ballx[i] = Math.random();
+			ballY[i] = Math.random();
+			ballXvelocity[i] = Math.random() * (highVelocity - LowestVelocity) + LowestVelocity; //sets v between lv and uv 
+			ballYvelocity[i] = Math.random() * (highVelocity - LowestVelocity) + LowestVelocity; 
+			}
+
+            ///buffering 
+			StdDraw.enableDoubleBuffering();
+
+			long starttime = System.currentTimeMillis(); ///renamme st to start time 
+			long deltatime = System.currentTimeMillis(); /// renamed dt to delta time for clarity 
+
+
+			/////
 		}
-		
-		StdDraw.enableDoubleBuffering();
-		
-		long st = System.currentTimeMillis();
-		long dt = System.currentTimeMillis();
+	    
+      
 		
 		while (true) {
-			
-			StdDraw.clear();
-			boolean c = false;
-			for(int i = 0; i < b; i++) {
-				
-			
-				bx[i] = bx[i] + bxv[i];
-				bY[i] = bY[i] + bYv[i];
-				if(bx[i] + r > 1 || bx[i] - r < 0) { 
-					bxv[i] = -bxv[i];
+		    StdDraw.clear(); /// clear the screen before starting the game loop
+		    boolean collision = false; 
+            
+			StdDraw.clear(); /// 
+			boolean collison = false; 
+		
+
+
+			for(int i = 0; i < balls; i++) {
+				 
+			//// set ball postion 
+			///ballx and ball
+				ballx[i] = ballx[i] + ballXvelocity[i]; 
+				ballY[i] = ballY[i] + ballYvelocity[i];
+				if(ballXvelocity[i] + radius > 1 || ballx[i] - r < 0) { 
+					ballXvelocity[i] = -ballXvelocity[i];
 				}
-				if(bY[i] + r > 1 || bY[i] - r < 0) { 
-					bYv[i] = -bYv[i];
+				if(ballY[i] + radius > 1 || ballY[i] - r < 0) { 
+					ballYvelocity[i] = -ballYvelocity[i];
 				}
-				for(int j = 0; j < b; j++) {
+				for(int j = 0; j < balls; j++) {
 					if(i != j) {
-						double d = Math.sqrt(Math.pow(bx[i] - bx[j], 2) + Math.pow(bY[i] - bY[j], 2));
-						if(d < 2 * r) {
-							bxv[i] = -bxv[i];
-							bYv[i] = -bYv[i];
+						double distance = Math.sqrt(Math.pow(ballx[i] - ballx[j], 2) + Math.pow(ballY[i] - ballY[j], 2));
+						if(distance < 2 * radius) { 
+							ballXvelocity[i] = -ballXvelocity[i];
+							ballYvelocity[i] = -ballYvelocity[i];
 						}
 					}
 				}
 				
-				double d = Math.sqrt(Math.pow(bx[i] - px, 2) + Math.pow(bY[i] - py, 2));
-				if(d < 2 * r) {
+				double d = Math.sqrt(Math.pow(ballx[i] - playerx, 2) + Math.pow(ballY[i] - playery, 2));
+				if(distance < 2 * radius) {
 					c = true;
 				}
 			}
 			
 			if(c) {
-				b = 3;
-				for(int i = 0; i < b; i++) {
-					bx[i] = Math.random();
-					bY[i] = Math.random();
-					bxv[i] = Math.random() * (uv - lv) + lv;
-					bYv[i] = Math.random() * (uv - lv) + lv;
-					s = 0;
-					st = System.currentTimeMillis();
-					dt = System.currentTimeMillis();
-					px = 0.5;
-					py = 0.5;
+				balls = 3;
+				for(int i = 0; i < balls; i++) {
+					ballx[i] = Math.random();
+					ballY[i] = Math.random();
+					bxv[i] = Math.random() * (highVelocity - LowestVelocity) + LowestVelocity;
+					bYv[i] = Math.random() * (highVelocity - LowestVelocity) + LowestVelocity;
+					score = 0;
+					starttime = System.currentTimeMillis();
+					deltatime = System.currentTimeMillis();
+					playerx = 0.5;
+					playery = 0.5;
 				}
 				
 				
 			}
-			
+			///if statments for player moment 
+			//// WSD keys 
+			public static void playerMovement() {  
 			if(StdDraw.isKeyPressed(KeyEvent.VK_W)) {
-				py = py + ps;
+				playery = playery + ps;
 			}
 			if(StdDraw.isKeyPressed(KeyEvent.VK_S)) {
-				py = py - ps;
+				playery = playery - ps;
 			}
 			if(StdDraw.isKeyPressed(KeyEvent.VK_A)) {
-				px = px - ps;
+				playerx = playerx - ps;
 			}
 			if(StdDraw.isKeyPressed(KeyEvent.VK_D)) {
-				px = px + ps;
+				playerx = px + ps;
 			}
 			
-			if(px > 1) {
-				px = 1;
+			if(playerx > 1) {
+				playerx = 1;
 			}
-			if(px < 0) {
-				px = 0;
+			if(playerx < 0) {
+				playerx = 0;
 			}
-			if(py > 1) {
-				py = 1;
+			if(playery > 1) {
+				playery = 1;
 			}
-			if(py < 0) {
-				py = 0;
+			if(playery < 0) {
+				playery = 0;
 			}
-			
+			} 
+			public static void scoreAndBallIncrease() {
 			long now = System.currentTimeMillis();
-			if(now > st + 1000) {
-				s++;
-				if(s > hs) {
-					hs = s;
+		
+			if(now > starttime + 1000) {
+				score++;
+				if(score > highscore) {
+					highscore = score;
 				}
-				st = now;
+				starttime = now;
 			}
-			
-			if(now > dt + 10000) {
-				b++;
+			// add new ball every 10 seconds 
+			if(now > deltatime + 10000) {
+				balls++;
 				double[] ballXnew = new double[b];
 				double[] ballYnew = new double[b];
 				double[] ballXVnew = new double[b];
 				double[] ballYVnew = new double[b];
-				for(int i = 0; i < b - 1; i++) {
+				for(int i = 0; i < balls - 1; i++) {
 					ballXnew[i] = bx[i];
 					ballYnew[i] = bY[i];
 					ballXVnew[i] = bxv[i];
 					ballYVnew[i] = bYv[i];
 				}
-				ballXnew[b-1] = Math.random();
-				ballYnew[b-1] = Math.random();
-				ballXVnew[b-1] = Math.random() * (uv - lv) + lv;
-				ballYVnew[b-1] = Math.random() * (uv - lv) + lv;
-				bx = ballXnew;
-				bY = ballYnew;
-				bxv = ballXVnew;
-				bYv = ballYVnew;
-				dt = now;
+				ballXnew[balls-1] = Math.random();
+				ballYnew[balls-1] = Math.random();
+				ballXVnew[balls-1] = Math.random() * (uv - LowestVelocity) + LowestVelocity;
+				ballYVnew[balls-1] = Math.random() * (uv - LowestVelocity) + LowestVelocity;
+				ballx = ballXnew;
+				ballY = ballYnew;
+				ballXVnew = ballXVnew;
+				ballYVnew = ballYVnew;
+				deltatime = now; //reset timer for next ball 
 			}
 			StdDraw.setPenColor(Color.red);
-			for(int i = 0; i < b; i++) {
-				StdDraw.filledCircle(bx[i], bY[i], r);
+			for(int i = 0; i < balls ; i++) {
+				StdDraw.filledCircle(ballx[i], ballY[i], radius);
 			}
 			
 			StdDraw.setPenColor(Color.black);
-			StdDraw.filledCircle(px, py, r);
-			StdDraw.text(0.5, 0.1, "Score: " + s + " High Score: " + hs);
+			StdDraw.filledCircle(playerx, playery, radius);
+			StdDraw.text(0.5, 0.1, "Score: " + score + " High Score: " + highscore);
 			
 			StdDraw.show();
 			StdDraw.pause(10);
 			
 		}
+		} 
 	}
 }
